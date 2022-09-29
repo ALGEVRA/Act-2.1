@@ -1,8 +1,8 @@
 // =================================================================
 //
 // File: list.h
-// Author:
-// Date:
+// Author: Francisco Alejandro Velazquez Ledesma
+// Date: 28/09/2022
 // 
 // =================================================================
 #ifndef LIST_H
@@ -224,8 +224,21 @@ T List<T>::last() const {
 template <class T>
 T List<T>::get(uint index) const {
 	T aux;
+	Node<T> *p = head;
 
-	// TO DO
+	if(index >= size)
+	{
+		throw IndexOutOfBounds();
+	}
+		
+
+	for(int i = 0; i < index; i++)
+	{
+		p = p->next;
+	}
+
+	aux = p->value;
+
 	return aux;
 }
 
@@ -275,7 +288,31 @@ void List<T>::push_back(T val) {
 // =================================================================
 template <class T>
 void List<T>::insert_at(T val, uint index) {
-	// TO DO
+
+	Node<T> *p, *q;
+    q = new Node<T>(val);
+	if (empty()) {
+		push_front(val);
+		return;
+	}
+	p = head;
+    if (length()<index){
+	 throw IndexOutOfBounds();
+    }
+    if (index>=0&&index<=length()){
+		if (index==0){
+			q->next = head;
+			head = q;
+			size++;
+		}else{
+	   		for (int i = 0; i < index-1; i++){
+			 	p = p->next;
+		   	}
+			q->next = p->next;
+			p->next = q;
+			size++;
+		}
+	}
 }
 
 // =================================================================
@@ -346,8 +383,31 @@ T List<T>::pop_back() {
 // =================================================================
 template <class T>
 T List<T>::remove_at(uint index) {
+	Node<T> *p, *q;
 	T aux;
-	// TO DO
+	
+	if(index >= size ) throw IndexOutOfBounds();
+
+	p = head;
+	if(index == 0)
+	{
+		aux = p->value;
+		head = p->next;
+		delete p;
+	}
+	else
+	{
+		for(int i = 0; i < index-1; i++)
+		{
+			p = p->next;
+		}
+		aux = p->next->value;
+		q = p->next->next;
+		delete p->next;
+		p->next = q;
+	}
+	size--;
+
 	return aux;
 }
 
@@ -359,7 +419,15 @@ T List<T>::remove_at(uint index) {
 // =================================================================
 template <class T>
 long int List<T>::indexOf(T val) const {
-	// TO DO
+	
+	Node<T> *p = head;
+	long int index = 0;
+	while( p != NULL) {
+		if(p->value == val) return index;
+		p = p->next;
+		index++;
+	}
+
 	return -1;
 }
 
